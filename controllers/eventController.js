@@ -44,6 +44,7 @@ export const createEvent = async (req, res) => {
   }
 };
 
+
 // Fetch an event by its ID
 export const getEvent = async (req, res) => {
   const { id } = req.params;
@@ -56,6 +57,8 @@ export const getEvent = async (req, res) => {
   }
 };
 
+
+
 // Update an event by its ID
 export const updateEvent = async (req, res) => {
   const { id } = req.params;
@@ -65,9 +68,9 @@ export const updateEvent = async (req, res) => {
     if (!existingEvent) return res.status(404).json({ message: "Event not found" });
 
     const updatedEvent = await Event.findByIdAndUpdate(id, event, { new: true });
-    res.status(200).json(updatedEvent);
+    res.status(200).json({updatedEvent, ok: true});
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ message: error.message, ok: false });
   }
 };
 

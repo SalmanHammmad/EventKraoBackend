@@ -12,16 +12,32 @@ const eventSchema = new mongoose.Schema({
     date: {
         type: Date
     },
+    startDate: {
+        type: Date
+    },
+    endDate: {
+        type: Date
+    },
     location: {
         type: String
     },
     image: {
         type: String
     },
-    creator: {
-        type: mongoose.Types.ObjectId,
-        ref: "User"
-    }
+    
+    organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    isPublic: { type: Boolean, default: true }, // Can be public or private
+    services: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Service'
+    }],
+    ticketPrice: { type: Number }, // If event is paid
+    attendees: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    status: { type: String, enum: ['upcoming', 'ongoing', 'completed'], default: 'upcoming' }
+
 }, { timestamps: true });
 
 

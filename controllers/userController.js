@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import mongoose from "mongoose";
 
 export const getUsers = async (req, res) => {
   try {
@@ -24,11 +25,12 @@ export const getUser = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user);
     }
     catch (error) {
-        res.status(404).json({ message: error.message });
-        }
+        res.status(404).json({ message: error.message, ok: false });
+    }
 }
 
 export const updateUser = async (req, res) => {
@@ -37,10 +39,11 @@ export const updateUser = async (req, res) => {
 
     try {
         const updatedUser = await User.findByIdAndUpdate(id, user, {new: true});
-        res.status(200).json(updatedUser);
+        
+        res.status(200).json({updatedUser, ok: true});
     }
     catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(404).json({ message: error.message ,ok: false});
     }
 }
 
@@ -51,9 +54,9 @@ export const deleteUser = async (req, res) => {
         if(!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        res.status(200).json({ message: "User deleted successfully" });
+        res.status(200).json({ message: "User deleted successfully", ok: true });
     }catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(404).json({ message: error.message, ok: false });
     }
 
 }
