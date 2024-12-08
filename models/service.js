@@ -1,20 +1,20 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const ServiceSchema = new mongoose.Schema({
+const serviceSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    provider: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // The service provider
     description: { type: String },
-    category: { type: String, required: true }, // E.g., 'Artist', 'Catering', 'Marquee'
-    priceRange: { min: Number, max: Number }, // For budget-based recommendations
-    availability: [{
-        date: { type: Date },
-        isBooked: { type: Boolean, default: false }
-    }],
+    category: { type: String, enum: ['Catering', 'Venue', 'Photography', 'Entertainment', 'Decor'], required: true },
+    price: { type: Number, required: true },
+    image: { type: String },
+    provider: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    availability: [{ type: Date }], // Dates when the service is available
+    rating: { type: Number, default: 0 },
     reviews: [{
-        rating: { type: Number, required: true },
+        rating: { type: Number },
         comment: { type: String },
         reviewer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
     }]
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('Service', ServiceSchema);
+const Service = mongoose.model("Service", serviceSchema);
+export default Service;
